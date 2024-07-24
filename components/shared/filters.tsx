@@ -1,5 +1,6 @@
 import { Input } from "../ui";
 import FilterCheckbox from "./filter-checkbox";
+import RangeSlider from "./range-slider";
 import Title from "./title";
 
 interface Props {
