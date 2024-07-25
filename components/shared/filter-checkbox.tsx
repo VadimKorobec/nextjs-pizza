@@ -1,3 +1,5 @@
+
+
 import { Checkbox } from "../ui/checkbox";
 
 export interface FilterChecboxProps {
@@ -15,7 +17,6 @@ const FilterCheckbox = ({
   endAdornment,
   onCheckedChange,
   checked,
-  
 }: FilterChecboxProps) => {
   return (
     <div className="flex items-center space-x-2">

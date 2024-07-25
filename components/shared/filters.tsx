@@ -1,4 +1,7 @@
+
+
 import { Input } from "../ui";
+import CheckboxFiltersGroup from "./ckeckbox-filters-group";
 import FilterCheckbox from "./filter-checkbox";
 import RangeSlider from "./range-slider";
 import Title from "./title";
@@ -32,9 +35,36 @@ const Filters = ({ className }: Props) => {
             min={100}
             max={1000}
           />
-              </div>
-              <RangeSlider min={0} max={5000} step={10} value={[0, 5000]} />
+        </div>
+        <RangeSlider min={0} max={5000} step={10} value={[0, 5000]} />
       </div>
+      <CheckboxFiltersGroup
+        title="Ingredients"
+        className="mt-5"
+        limit={6}
+        defaultItems={[
+          { text: "Cheese sauce", value: "1" },
+          { text: "Mozzarella", value: "2" },
+          { text: "Garlic", value: "3" },
+          { text: "Pickle", value: "4" },
+          { text: "Red onion", value: "5" },
+          { text: "Tomatoes", value: "6" },
+        ]}
+        items={[
+          { text: "Cheese sauce", value: "1" },
+          { text: "Mozzarella", value: "2" },
+          { text: "Garlic", value: "3" },
+          { text: "Pickle", value: "4" },
+          { text: "Red onion", value: "5" },
+          { text: "Tomatoes", value: "6" },
+          { text: "Cheese sauce", value: "1" },
+          { text: "Mozzarella", value: "2" },
+          { text: "Garlic", value: "3" },
+          { text: "Pickle", value: "4" },
+          { text: "Red onion", value: "5" },
+          { text: "Tomatoes", value: "6" },
+        ]}
+      />
     </div>
   );
 };
