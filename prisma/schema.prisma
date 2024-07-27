@@ -3,17 +3,28 @@ generator client {
 }
 
 datasource db {
-    provider = "postgresql"
-    url= env("POSTGRES_URL")
+    provider  = "postgresql"
+    url       = env("POSTGRES_URL")
     directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
 model User {
     id Int @id @default(autoincrement())
 
-    fullName String 
-    email String @unique
+    fullName String
+    email    String @unique
     password String
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    Cart      Cart?
+}
+
+model Category {
+    id Int @id @default(autoincrement())
+
+    name     String    @unique
+    products Product[]
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -22,10 +33,58 @@ model User {
 model Product {
     id Int @id @default(autoincrement())
 
-    name String
+    name     String
     imageUrl String
+
+    ingredients Ingridient[]
+    items       ProductItem[]
+
+    category   Category @relation(fields: [categoryId], references: [id])
+    categoryId Int
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+}
 
+model ProductItem {
+    id Int @id @default(autoincrement())
+
+    price     Int
+    size      Int?
+    pizzaType Int?
+
+    product   Product @relation(fields: [productId], references: [id])
+    productId Int
+}
+
+model Ingridient {
+    id Int @id @default(autoincrement())
+
+    name     String
+    price    Int
+    imageUrl String
+
+    products Product[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model Cart {
+    id Int @id @default(autoincrement())
+
+    user   User? @relation(fields: [userId], references: [id])
+    userId Int? @unique
+
+    token String
+
+
+    totalAmount Int @default(0)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model CartItem {
+    id Int @id @default(autoincrement())
 }
