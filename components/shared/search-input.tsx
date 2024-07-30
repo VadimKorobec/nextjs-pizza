@@ -1,9 +1,10 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import { Api } from "@/services/api-client";
 import { Search } from "lucide-react";
 import Link from "next/link";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useClickAway } from "react-use";
 
 interface Props {
@@ -17,6 +18,10 @@ const SearchInput = ({ className }: Props) => {
   useClickAway(ref, () => {
     setFocused(false);
   });
+
+  useEffect(() => {
+    Api.products.search
+  })
 
   return (
     <>
