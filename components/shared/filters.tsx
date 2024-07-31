@@ -1,4 +1,4 @@
-
+import { useFilterIngredients } from "@/hooks/useFilterIngredients";
 
 import { Input } from "../ui";
 import CheckboxFiltersGroup from "./ckeckbox-filters-group";
@@ -11,6 +11,7 @@ interface Props {
 }
 
 const Filters = ({ className }: Props) => {
+  const {ingredients} = useFilterIngredients()
   return (
     <div className={className}>
       <Title text="Filtration" size="sm" className="mb-5 font-bold" />
@@ -42,14 +43,7 @@ const Filters = ({ className }: Props) => {
         title="Ingredients"
         className="mt-5"
         limit={6}
-        defaultItems={[
-          { text: "Cheese sauce", value: "1" },
-          { text: "Mozzarella", value: "2" },
-          { text: "Garlic", value: "3" },
-          { text: "Pickle", value: "4" },
-          { text: "Red onion", value: "5" },
-          { text: "Tomatoes", value: "6" },
-        ]}
+        defaultItems={ingredients.slice(0,6)}
         items={[
           { text: "Cheese sauce", value: "1" },
           { text: "Mozzarella", value: "2" },
