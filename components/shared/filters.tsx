@@ -1,3 +1,5 @@
+"use client";
+
 import { useFilterIngredients } from "@/hooks/useFilterIngredients";
 
 import { Input } from "../ui";
@@ -5,20 +7,50 @@ import CheckboxFiltersGroup from "./ckeckbox-filters-group";
 import FilterCheckbox from "./filter-checkbox";
 import RangeSlider from "./range-slider";
 import Title from "./title";
+import { useState } from "react";
 
 interface Props {
   className?: string;
 }
 
+interface PriceProps {
+  priceFrom: number;
+  priceTo: number;
+}
+
 const Filters = ({ className }: Props) => {
-  const {ingredients} = useFilterIngredients()
+  const { ingredients, loading, onAddId, selectedIds } = useFilterIngredients();
+  const [prices, setPrice] = useState<PriceProps>({
+    priceFrom: 0,
+    priceTo: 1000,
+  });
+
+  const items = ingredients.map((item) => ({
+    value: String(item.id),
+    text: item.name,
+  }));
+
+  const updatePrice = (name: keyof PriceProps, value: number) => {
+    setPrice({
+      ...prices,
+      [name]: value,
+    });
+  };
+
   return (
     <div className={className}>
       <Title text="Filtration" size="sm" className="mb-5 font-bold" />
-      <div className="flex flex-col gap-4">
-        <FilterCheckbox text="Collect" value="1" />
-        <FilterCheckbox text="New products" value="2" />
-      </div>
+      <CheckboxFiltersGroup
+        title="Sizes"
+        name="sizes"
+        className="mb-5"
+        onClickCheckbox={toggleSizes}
+        items={[
+          { text: "20 cm", value: "20" },
+          { text: "30 cm", value: "30" },
+          { text: "40 cm", value: "40" },
+        ]}
+      />
       <div className="mt-5 border-y border-y-neutral-100 py-6 pb-7">
         <p className="font-bold mb-3">Price from and to </p>
         <div className="flex gap-3 mb-5">
@@ -27,37 +59,38 @@ const Filters = ({ className }: Props) => {
             placeholder="0"
             min={0}
             max={1000}
-            defaultValue={0}
+            value={String(prices.priceFrom)}
+            onChange={(e) => updatePrice("priceFrom", Number(e.target.value))}
           />
           <Input
             type="number"
             placeholder="1000"
-            value={500}
+            value={String(prices.priceTo)}
             min={100}
             max={1000}
+            onChange={(e) => updatePrice("priceTo", Number(e.target.value))}
           />
         </div>
-        <RangeSlider min={0} max={5000} step={10} value={[0, 5000]} />
+        <RangeSlider
+          min={0}
+          max={1000}
+          step={10}
+          value={[prices.priceFrom, prices.priceTo]}
+          onValueChange={([from, to]) =>
+            setPrice({ priceFrom: from, priceTo: to })
+          }
+        />
       </div>
       <CheckboxFiltersGroup
         title="Ingredients"
+        name="ingredients"
         className="mt-5"
         limit={6}
-        defaultItems={ingredients.slice(0,6)}
-        items={[
-          { text: "Cheese sauce", value: "1" },
-          { text: "Mozzarella", value: "2" },
-          { text: "Garlic", value: "3" },
-          { text: "Pickle", value: "4" },
-          { text: "Red onion", value: "5" },
-          { text: "Tomatoes", value: "6" },
-          { text: "Cheese sauce", value: "1" },
-          { text: "Mozzarella", value: "2" },
-          { text: "Garlic", value: "3" },
-          { text: "Pickle", value: "4" },
-          { text: "Red onion", value: "5" },
-          { text: "Tomatoes", value: "6" },
-        ]}
+        defaultItems={items.slice(0, 6)}
+        items={items}
+        loading={loading}
+        onClickCheckbox={onAddId}
+        selectedIds={selectedIds}
       />
     </div>
   );
