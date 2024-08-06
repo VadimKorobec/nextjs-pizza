@@ -4,25 +4,49 @@ import { useFilterIngredients } from "@/hooks/useFilterIngredients";
 
 import { Input } from "../ui";
 import CheckboxFiltersGroup from "./ckeckbox-filters-group";
-import FilterCheckbox from "./filter-checkbox";
 import RangeSlider from "./range-slider";
 import Title from "./title";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSet } from "react-use";
+import qs from "qs";
+import { useRouter, useSearchParams } from "next/navigation";
 
 interface Props {
   className?: string;
 }
 
 interface PriceProps {
-  priceFrom: number;
-  priceTo: number;
+  priceFrom?: number;
+  priceTo?: number;
+}
+
+interface QueryFilters extends PriceProps {
+  pizzaTypes: string;
+  sizes: string;
+  ingredients: string;
 }
 
 const Filters = ({ className }: Props) => {
-  const { ingredients, loading, onAddId, selectedIds } = useFilterIngredients();
+  const searchParams = useSearchParams() as unknown as Map<
+    keyof QueryFilters,
+    string
+  >;
+  const router = useRouter();
+  const { ingredients, loading, onAddId, selectedIngredients } =
+    useFilterIngredients();
+  const [sizes, { toggle: toggleSizes }] = useSet(
+    new Set<string>(
+      searchParams.get("sizes") ? searchParams.get("sizes")?.split(",") : []
+    )
+  );
+  const [pizzaTypes, { toggle: togglePizzaTypes }] = useSet(
+    new Set<string>(
+      searchParams.get('pizzaTypes') ? searchParams.get('pizzaTypes')?.split(",") : []
+    )
+  );
   const [prices, setPrice] = useState<PriceProps>({
-    priceFrom: 0,
-    priceTo: 1000,
+    priceFrom: Number(searchParams.get("priceFrom")) || undefined,
+    priceTo: Number(searchParams.get("priceTo")),
   });
 
   const items = ingredients.map((item) => ({
@@ -37,14 +61,45 @@ const Filters = ({ className }: Props) => {
     });
   };
 
+  console.log(searchParams, 999);
+
+  useEffect(() => {
+    const filters = {
+      ...prices,
+      pizzaTypes: Array.from(pizzaTypes),
+      sizes: Array.from(sizes),
+      ingredients: Array.from(selectedIngredients),
+    };
+
+    const query = qs.stringify(filters, {
+      arrayFormat: "comma",
+    });
+
+    router.push(`?${query}`, {
+      scroll: false,
+    });
+  }, [pizzaTypes, prices, router, selectedIngredients, sizes]);
+
   return (
     <div className={className}>
       <Title text="Filtration" size="sm" className="mb-5 font-bold" />
+      <CheckboxFiltersGroup
+        title="Type of dough"
+        name="pizzaTypes"
+        className="mb-5"
+        onClickCheckbox={togglePizzaTypes}
+        selected={pizzaTypes}
+        items={[
+          { text: "Slim", value: "1" },
+          { text: "Traditional", value: "2" },
+        ]}
+      />
       <CheckboxFiltersGroup
         title="Sizes"
         name="sizes"
         className="mb-5"
         onClickCheckbox={toggleSizes}
+        selected={sizes}
         items={[
           { text: "20 cm", value: "20" },
           { text: "30 cm", value: "30" },
@@ -75,7 +130,7 @@ const Filters = ({ className }: Props) => {
           min={0}
           max={1000}
           step={10}
-          value={[prices.priceFrom, prices.priceTo]}
+          value={[prices.priceFrom || 0, prices.priceTo || 1000]}
           onValueChange={([from, to]) =>
             setPrice({ priceFrom: from, priceTo: to })
           }
@@ -90,7 +145,7 @@ const Filters = ({ className }: Props) => {
         items={items}
         loading={loading}
         onClickCheckbox={onAddId}
-        selectedIds={selectedIds}
+        selected={selectedIngredients}
       />
     </div>
   );
