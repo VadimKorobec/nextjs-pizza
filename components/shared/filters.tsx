@@ -1,66 +1,31 @@
 "use client";
 
-import { useFilterIngredients } from "@/hooks/use-filter-ingredients";
-
 import { Input } from "../ui";
 import CheckboxFiltersGroup from "./ckeckbox-filters-group";
 import RangeSlider from "./range-slider";
 import Title from "./title";
-import { useEffect, useState } from "react";
-import { useSet } from "react-use";
+import { useEffect } from "react";
 import qs from "qs";
-import { useRouter, useSearchParams } from "next/navigation";
+import useIngredients from "@/hooks/use-ingredients";
+import useFilters from "@/hooks/use-filters";
+import { useRouter } from "next/navigation";
+
 
 interface Props {
   className?: string;
 }
 
-
-
-
-
 const Filters = ({ className }: Props) => {
- 
-
-  
-
-  
-
-  
-
-  
-
+  const router = useRouter()
+  const { ingredients, loading } = useIngredients();
+  const filters = useFilters();
 
   const items = ingredients.map((item) => ({
     value: String(item.id),
     text: item.name,
   }));
 
-  const updatePrice = (name: keyof PriceProps, value: number) => {
-    setPrice({
-      ...prices,
-      [name]: value,
-    });
-  };
-
-  console.log(searchParams, 999);
-
-  useEffect(() => {
-    const filters = {
-      ...prices,
-      pizzaTypes: Array.from(pizzaTypes),
-      sizes: Array.from(sizes),
-      ingredients: Array.from(selectedIngredients),
-    };
-
-    const query = qs.stringify(filters, {
-      arrayFormat: "comma",
-    });
-
-    router.push(`?${query}`, {
-      scroll: false,
-    });
-  }, [pizzaTypes, prices, router, selectedIngredients, sizes]);
+  
 
   return (
     <div className={className}>
