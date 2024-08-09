@@ -1,4 +1,4 @@
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useSet } from "react-use";
 import { useState } from "react";
 
@@ -13,8 +13,8 @@ interface QueryFilters extends PriceProps {
   ingredients: string;
 }
 
-interface Filters {
-  size: Set<string>;
+export interface Filters {
+  sizes: Set<string>;
   pizzaTypes: Set<string>;
   selectedIngredients: Set<string>;
   prices: PriceProps;
@@ -22,9 +22,12 @@ interface Filters {
 
 interface ReturnProps extends Filters {
   setPrices: (name: keyof PriceProps, value: number) => void;
+  setPizzaTypes: (value: string) => void;
+  setSizes: (value: string) => void;
+  setSelectedIngredients: (value: string) => void;
 }
 
-const useFilters = () => {
+const useFilters = (): ReturnProps => {
   const searchParams = useSearchParams() as unknown as Map<
     keyof QueryFilters,
     string
@@ -54,10 +57,10 @@ const useFilters = () => {
   });
 
   const updatePrice = (name: keyof PriceProps, value: number) => {
-    setPrices({
-      ...prices,
+    setPrices((prev) => ({
+      ...prev,
       [name]: value,
-    });
+    }));
   };
 
   return {
@@ -68,7 +71,7 @@ const useFilters = () => {
     setPrices: updatePrice,
     setPizzaTypes: togglePizzaTypes,
     setSizes: toggleSizes,
-    setIngredients: toggleIngredients,
+    setSelectedIngredients: toggleIngredients,
   };
 };
 

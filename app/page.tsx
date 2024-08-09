@@ -2,10 +2,11 @@ import Title from "@/components/shared/title";
 import Container from "@/components/shared/container";
 import TopBar from "@/components/shared/top-bar";
 import Filters from "@/components/shared/filters";
-import ProductCard from "@/components/shared/product-card";
 import ProductsGroupList from "@/components/shared/products-group-list";
+import { prisma } from "@/prisma/prisma-client";
 
-export default function Home() {
+export default async function Home() {
+  const categories = await prisma.category.findMany({})
   return (
     <>
       <Container className="mt-10">

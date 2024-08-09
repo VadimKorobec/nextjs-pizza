@@ -1,13 +1,10 @@
 import { Api } from "@/services/api-client";
 import { Ingredient } from "@prisma/client";
 import { useEffect, useState } from "react";
-import { useSet } from "react-use";
 
 const useIngredients = () => {
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
-    
-    const [selectedIngredients, { toggle : toggleIngredients}] = useSet(new Set<string>(values));
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchIngredients = async () => {
