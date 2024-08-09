@@ -6,13 +6,27 @@ import ProductsGroupList from "@/components/shared/products-group-list";
 import { prisma } from "@/prisma/prisma-client";
 
 export default async function Home() {
-  const categories = await prisma.category.findMany({})
+  const categories = await prisma.category.findMany({
+    include: {
+      products: {
+        include: {
+          ingredients: true,
+          items: true,
+        },
+      },
+    },
+  });
+
   return (
     <>
       <Container className="mt-10">
         <Title text="All Pizzas" size="lg" className="font-extrabold" />
       </Container>
-      <TopBar />
+      <TopBar
+        categories={categories.filter(
+          (category) => category.products.length > 0
+        )}
+      />
       <Container className=" mt-10 pb-14">
         <div className="flex gap-[80px]">
           <div className="w-[250px]">
@@ -20,114 +34,17 @@ export default async function Home() {
           </div>
           <div className="flex-1">
             <div className="flex flex-col gap-16">
-              <ProductsGroupList
-                title={"Pizzas"}
-                items={[
-                  {
-                    id: 1,
-                    name: "Pizza",
-                    price: 100,
-                    imageUrl:
-                      "https://media.dodostatic.net/image/r:292x292/11EE7D61389AB51A8F648A0DBA5B1689.avif",
-                    items: [{ price: 100 }],
-                  },
-                  {
-                    id: 2,
-                    name: "Pizza",
-                    price: 100,
-                    imageUrl:
-                      "https://media.dodostatic.net/image/r:292x292/11EE7D61389AB51A8F648A0DBA5B1689.avif",
-                    items: [{ price: 100 }],
-                  },
-                  {
-                    id: 3,
-                    name: "Pizza",
-                    price: 100,
-                    imageUrl:
-                      "https://media.dodostatic.net/image/r:292x292/11EE7D61389AB51A8F648A0DBA5B1689.avif",
-                    items: [{ price: 100 }],
-                  },
-                  {
-                    id: 4,
-                    name: "Pizza",
-                    price: 100,
-                    imageUrl:
-                      "https://media.dodostatic.net/image/r:292x292/11EE7D61389AB51A8F648A0DBA5B1689.avif",
-                    items: [{ price: 100 }],
-                  },
-                  {
-                    id: 5,
-                    name: "Pizza",
-                    price: 100,
-                    imageUrl:
-                      "https://media.dodostatic.net/image/r:292x292/11EE7D61389AB51A8F648A0DBA5B1689.avif",
-                    items: [{ price: 100 }],
-                  },
-                  {
-                    id: 6,
-                    name: "Pizza",
-                    price: 100,
-                    imageUrl:
-                      "https://media.dodostatic.net/image/r:292x292/11EE7D61389AB51A8F648A0DBA5B1689.avif",
-                    items: [{ price: 100 }],
-                  },
-                ]}
-                categoryId={1}
-              />
-              <ProductsGroupList
-                title={"Combo"}
-                items={[
-                  {
-                    id: 1,
-                    name: "Cheesecakes with condensed milk",
-                    price: 100,
-                    imageUrl:
-                      "https://media.dodostatic.net/image/r:292x292/11EE7D61877A2EE09AA2178718EFB59C.avif",
-                    items: [{ price: 100 }],
-                  },
-                  {
-                    id: 2,
-                    name: "Cheesecakes with condensed milk",
-                    price: 100,
-                    imageUrl:
-                      "https://media.dodostatic.net/image/r:292x292/11EE7D61877A2EE09AA2178718EFB59C.avif",
-                    items: [{ price: 100 }],
-                  },
-                  {
-                    id: 3,
-                    name: "Cheesecakes with condensed milk",
-                    price: 100,
-                    imageUrl:
-                      "https://media.dodostatic.net/image/r:292x292/11EE7D61877A2EE09AA2178718EFB59C.avif",
-                    items: [{ price: 100 }],
-                  },
-                  {
-                    id: 4,
-                    name: "Cheesecakes with condensed milk",
-                    price: 100,
-                    imageUrl:
-                      "https://media.dodostatic.net/image/r:292x292/11EE7D61877A2EE09AA2178718EFB59C.avif",
-                    items: [{ price: 100 }],
-                  },
-                  {
-                    id: 5,
-                    name: "Cheesecakes with condensed milk",
-                    price: 100,
-                    imageUrl:
-                      "https://media.dodostatic.net/image/r:292x292/11EE7D61877A2EE09AA2178718EFB59C.avif",
-                    items: [{ price: 100 }],
-                  },
-                  {
-                    id: 6,
-                    name: "Cheesecakes with condensed milk",
-                    price: 100,
-                    imageUrl:
-                      "https://media.dodostatic.net/image/r:292x292/11EE7D61877A2EE09AA2178718EFB59C.avif",
-                    items: [{ price: 100 }],
-                  },
-                ]}
-                categoryId={2}
-              />
+              {categories.map(
+                (category) =>
+                  category.products.length > 0 && (
+                    <ProductsGroupList
+                      key={category.id}
+                      title={category.name}
+                      categoryId={category.id}
+                      items={category.products}
+                    />
+                  )
+              )}
             </div>
           </div>
         </div>
