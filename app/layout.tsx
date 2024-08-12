@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Nunito } from "next/font/google";
 
 import "./globals.css";
-import Link from "next/link";
+
 
 const nunito = Nunito({
   subsets: ["cyrillic"],

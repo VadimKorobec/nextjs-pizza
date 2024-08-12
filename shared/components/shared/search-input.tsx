@@ -1,13 +1,14 @@
 "use client";
 
-import { cn } from "@/lib/utils";
-import { Api } from "@/services/api-client";
+import { cn } from "@/shared/lib/utils";
+
 import { Product } from "@prisma/client";
 import Link from "next/link";
 import { useRef, useState } from "react";
 import { useClickAway, useDebounce } from "react-use";
 
 import { Search } from "lucide-react";
+import { Api } from "@/shared/services/api-client";
 
 interface Props {
   className?: string;
@@ -21,23 +22,26 @@ const SearchInput = ({ className }: Props) => {
 
   useClickAway(ref, () => {
     setFocused(false);
-    
   });
 
-  useDebounce(async() => {
-    try {
-      const response = await Api.products.search(searchQuery)
-      setProducts(response)
-    } catch (error ) {
-      console.log(error)
-    }
-  }, 250, [searchQuery]);
-  
+  useDebounce(
+    async () => {
+      try {
+        const response = await Api.products.search(searchQuery);
+        setProducts(response);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    250,
+    [searchQuery]
+  );
+
   const onClickItem = () => {
     setFocused(false);
     setSearchQuery("");
-    setProducts([])
-  }
+    setProducts([]);
+  };
 
   return (
     <>

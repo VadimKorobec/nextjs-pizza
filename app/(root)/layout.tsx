@@ -1,6 +1,7 @@
+import Header from "@/shared/components/shared/header";
 import type { Metadata } from "next";
 
-import Header from "@/components/shared/header";
+
 
 export const metadata: Metadata = {
   title: "NextJS Pizza | Main page",

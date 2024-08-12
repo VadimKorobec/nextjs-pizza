@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cn } from "@/shared/lib/utils";
 
 interface Props {
   imageUrl: string;
@@ -6,7 +6,7 @@ interface Props {
   className?: string;
 }
 
-const ProductImage = ({ imageUrl, size, className }: Props) => {
+const PizzaImage = ({ imageUrl, size, className }: Props) => {
   return (
     <div
       className={cn(
@@ -33,4 +33,4 @@ const ProductImage = ({ imageUrl, size, className }: Props) => {
   );
 };
 
-export default ProductImage;
+export default PizzaImage;

@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cn } from "@/shared/lib/utils";
 import Categories from "./categories";
 import SortPopup from "./sort-popup";
 import Container from "./container";
@@ -10,7 +10,7 @@ interface Props {
   className?: string;
 }
 
-const TopBar = ({categories, className }: Props) => {
+const TopBar = ({ categories, className }: Props) => {
   return (
     <div
       className={cn(
