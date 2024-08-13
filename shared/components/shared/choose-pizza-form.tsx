@@ -1,10 +1,12 @@
-import { cn } from "@/shared/lib/utils";
+"use client";
 
+import { cn } from "@/shared/lib/utils";
 import Title from "./title";
 import { Button } from "../ui";
 import PizzaImage from "./pizza-image";
 import GroupVariants from "./group-variants";
-import { pizzaSizes } from "@/shared/constants/pizza";
+import { PizzaSize, pizzaSizes, PizzaType } from "@/shared/constants/pizza";
+import { useState } from "react";
 
 interface Props {
   imageUrl: string;
@@ -23,6 +25,9 @@ const ChoosePizzaForm = ({
   onClickAdd,
   className,
 }: Props) => {
+  const [size, setSize] = useState<PizzaSize>(20);
+  const [type, setType] = useState<PizzaType>(1);
+
   const textDetaills = "30sm, traditional 30";
   const totalPrice = 100;
 
@@ -32,7 +37,11 @@ const ChoosePizzaForm = ({
       <div className="w-[490px] bg=[#f7f6f5] p-7">
         <Title text={name} size="md" className="font-extrabold mb-1" />
         <p className="text-gray-400">{textDetaills}</p>
-        <GroupVariants items={pizzaSizes}/>
+        <GroupVariants
+          items={pizzaSizes}
+          value={String(size)}
+          onClick={(value) => setSize(Number(value) as PizzaSize)}
+        />
         <Button className="h-[55px] px-10 text-base rounded-[18px] w-full mt-10">
           Add to cart for {totalPrice} $
         </Button>

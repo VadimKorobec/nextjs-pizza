@@ -11,11 +11,11 @@ type Variant = {
 interface Props {
   items: readonly Variant[];
   onClick?: (value: Variant["value"]) => void;
-  selectedValue?: Variant["value"];
+  value?: Variant["value"];
   className?: string;
 }
 
-const GroupVariants = ({ items, onClick, className, selectedValue }: Props) => {
+const GroupVariants = ({ items, onClick, className, value }: Props) => {
   return (
     <div
       className={cn(
@@ -30,7 +30,7 @@ const GroupVariants = ({ items, onClick, className, selectedValue }: Props) => {
           className={cn(
             "flex items-center justify-center cursor-pointer h-[30px] px-5 flex-1 rounded-3xl transition-all duration-400 text-sm",
             {
-              "bg-white shadow": item.value === selectedValue,
+              "bg-white shadow": item.value === value,
               "text-gray-500 opacity-50 pointer-events-none": item.disabled,
             },
             className
