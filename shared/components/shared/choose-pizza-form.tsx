@@ -12,11 +12,15 @@ import {
   PizzaType,
   pizzaTypes,
 } from "@/shared/constants/pizza";
-import { useEffect, useState } from "react";
+
 import { Ingredient, ProductItem } from "@prisma/client";
 import IngredientItem from "./ingredient-item";
-import { useSet } from "react-use";
-import { calcTotalPizzaPrice } from "@/shared/lib/calc-total-pizza-price";
+import {
+  calcTotalPizzaPrice,
+  getAvailablePizzaSizes,
+  getPizzaDetails,
+} from "@/shared/lib";
+import { usePizzaOptions } from "@/shared/hooks/use-pizza-options";
 
 interface Props {
   imageUrl: string;
@@ -35,34 +39,23 @@ const ChoosePizzaForm = ({
   onClickAddCart,
   className,
 }: Props) => {
-  const [size, setSize] = useState<PizzaSize>(20);
-  const [type, setType] = useState<PizzaType>(1);
+  const {
+    type,
+    size,
+    selectedIngredients,
+    availableSizes,
+    setSize,
+    setType,
+    addIngredient,
+  } = usePizzaOptions(items);
 
-  const [selectedIngredients, { toggle: addIngredient }] = useSet(
-    new Set<number>([])
+  const { totalPrice, textDetaills } = getPizzaDetails(
+    type,
+    size,
+    items,
+    ingredients,
+    selectedIngredients
   );
-
- const totalPrice = calcTotalPizzaPrice(items,)
-  const textDetaills = `${size} sm, ${mapPizzaType[type]} pizza`;
-
-  const filteredPizzasByType = items.filter((item) => item.pizzaType === type);
-  const availablePizzaSizes = pizzaSizes.map((item) => ({
-    name: item.name,
-    value: item.value,
-    disabled: !filteredPizzasByType.some(
-      (pizza) => Number(pizza.size) === Number(item.value)
-    ),
-  }));
-
-  useEffect(() => {
-    const isAvailableSize = availablePizzaSizes?.find(
-      (item) => Number(item.value) === size && !item.disabled
-    );
-    const availableSize = availablePizzaSizes?.find((item) => !item.disabled);
-    if (!isAvailableSize && availableSize) {
-      setSize(Number(availableSize.value) as PizzaSize);
-    }
-  }, [type]);
 
   const handleClickAdd = () => {
     onClickAddCart?.();
@@ -76,7 +69,7 @@ const ChoosePizzaForm = ({
         <p className="text-gray-400">{textDetaills}</p>
         <div className="flex flex-col gap-3 mt-5">
           <GroupVariants
-            items={availablePizzaSizes}
+            items={availableSizes}
             value={String(size)}
             onClick={(value) => setSize(Number(value) as PizzaSize)}
           />
