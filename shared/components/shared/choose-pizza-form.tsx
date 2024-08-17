@@ -5,21 +5,10 @@ import Title from "./title";
 import { Button } from "../ui";
 import PizzaImage from "./pizza-image";
 import GroupVariants from "./group-variants";
-import {
-  mapPizzaType,
-  PizzaSize,
-  pizzaSizes,
-  PizzaType,
-  pizzaTypes,
-} from "@/shared/constants/pizza";
-
+import { PizzaSize, PizzaType, pizzaTypes } from "@/shared/constants/pizza";
 import { Ingredient, ProductItem } from "@prisma/client";
 import IngredientItem from "./ingredient-item";
-import {
-  calcTotalPizzaPrice,
-  getAvailablePizzaSizes,
-  getPizzaDetails,
-} from "@/shared/lib";
+import { getPizzaDetails } from "@/shared/lib";
 import { usePizzaOptions } from "@/shared/hooks/use-pizza-options";
 
 interface Props {
