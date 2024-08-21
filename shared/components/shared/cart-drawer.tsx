@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Sheet,
   SheetClose,
@@ -10,6 +12,8 @@ import {
 import Link from "next/link";
 import { Button } from "../ui";
 import { ArrowRight } from "lucide-react";
+import CartDrawerItem from "./cart-drawer-item";
+import { getCartItemDetails } from "@/shared/lib/get-cart-item-details";
 
 interface Props {
   children: React.ReactNode;
@@ -26,6 +30,24 @@ const CartDrawer = ({ children, className }: Props) => {
             In the cart <span className="font-bold">3 items</span>
           </SheetTitle>
         </SheetHeader>
+        <div className="flex-1 -mx-6 mt-5 overflow-auto ">
+          <div className="mb-2">
+            <CartDrawerItem
+              id={1}
+              imageUrl={
+                "https://media.dodostatic.net/image/r:233x233/11EE7D610CF7E265B7C72BE5AE757CA7.webp"
+              }
+              details={getCartItemDetails(1, 20, [
+                { name: "Chicken" },
+                { name: "Garlic" },
+              ])}
+              name={"Chorizo fresco"}
+              price={200}
+              quantity={1}
+            />
+          </div>
+        </div>
+
         <SheetFooter className="-mx-6 bg-white p-8">
           <div className="w-full">
             <div className="flex mb-4">
