@@ -7,6 +7,7 @@ import { Trash2Icon } from "lucide-react";
 import { useState } from "react";
 
 interface Props extends CartItemProps {
+  onClickCountButton?: (type: 'plus' | 'minus') => void;
   className?: string;
 }
 
