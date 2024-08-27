@@ -15,6 +15,7 @@ import CartDrawerItem from "./cart-drawer-item";
 import { getCartItemDetails } from "@/shared/lib/get-cart-item-details";
 import { useCartStore } from "@/shared/store/cart";
 import { useEffect } from "react";
+import { PizzaSize, PizzaType } from "@/shared/constants/pizza";
 
 interface Props {
   children: React.ReactNode;
@@ -22,15 +23,32 @@ interface Props {
 }
 
 const CartDrawer = ({ children, className }: Props) => {
-  const [totalAmount, fetchCartItems, items] = useCartStore((state) => [
+  const [
+    totalAmount,
+    fetchCartItems,
+    updateItemQuantity,
+    removeCartItem,
+    items,
+  ] = useCartStore((state) => [
     state.totalAmount,
     state.fetchCartItems,
+    state.updateItemQuantity,
+    state.removeCartItem,
     state.items,
   ]);
 
   useEffect(() => {
     fetchCartItems();
   }, []);
+
+  const onClickCountButton = (
+    id: number,
+    quantity: number,
+    type: "plus" | "minus"
+  ) => {
+    const newQuantity = type === "plus" ? quantity + 1 : quantity - 1;
+    updateItemQuantity(id, newQuantity);
+  };
 
   return (
     <Sheet>
@@ -48,14 +66,22 @@ const CartDrawer = ({ children, className }: Props) => {
                 key={item.id}
                 id={item.id}
                 imageUrl={item.imageUrl}
-                details={getCartItemDetails(
-                  item.pizzaType,
-                  item.pizzaSize,
-                  item.ingredients
-                )}
+                details={
+                  item.pizzaSize && item.pizzaType
+                    ? getCartItemDetails(
+                        item.pizzaType as PizzaType,
+                        item.pizzaSize as PizzaSize,
+                        item.ingredients
+                      )
+                    : ""
+                }
                 name={item.name}
                 price={item.price}
                 quantity={item.quantity}
+                onClickCountButton={(type) =>
+                  onClickCountButton(item.id, item.quantity, type)
+                }
+                onClickRemove={()=> removeCartItem(item.id)}
               />
             ))}
           </div>
