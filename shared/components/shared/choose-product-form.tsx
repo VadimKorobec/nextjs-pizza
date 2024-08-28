@@ -5,15 +5,14 @@ import { Button } from "../ui";
 interface Props {
   imageUrl: string;
   name: string;
-
-  onClickAdd?: VoidFunction;
+  onSubmit?:VoidFunction;
   className?: string;
 }
 
 const ChooseProductForm = ({
   name,
   imageUrl,
-  onClickAdd,
+  onSubmit,
   className,
 }: Props) => {
   const textDetaills = "30sm, traditional 30";
@@ -31,7 +30,7 @@ const ChooseProductForm = ({
       <div className="w-[490px] bg=[#f7f6f5] p-7">
         <Title text={name} size="md" className="font-extrabold mb-1" />
         <p className="text-gray-400">{textDetaills}</p>
-        <Button className="h-[55px] px-10 text-base rounded-[18px] w-full mt-10">
+        <Button onClick={onSubmit} className="h-[55px] px-10 text-base rounded-[18px] w-full mt-10">
           Add to cart for {totalPrice} $
         </Button>
       </div>

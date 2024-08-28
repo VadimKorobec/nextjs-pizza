@@ -16,7 +16,7 @@ interface Props {
   name: string;
   ingredients: Ingredient[];
   items: ProductItem[];
-  onClickAddCart?: VoidFunction;
+  onSubmit: (itemId: number, ingredients: number[]) => void;
   className?: string;
 }
 
@@ -25,7 +25,7 @@ const ChoosePizzaForm = ({
   items,
   imageUrl,
   ingredients,
-  onClickAddCart,
+  onSubmit,
   className,
 }: Props) => {
   const {
@@ -33,6 +33,7 @@ const ChoosePizzaForm = ({
     size,
     selectedIngredients,
     availableSizes,
+    currentItemId,
     setSize,
     setType,
     addIngredient,
@@ -47,7 +48,9 @@ const ChoosePizzaForm = ({
   );
 
   const handleClickAdd = () => {
-    onClickAddCart?.();
+    if (currentItemId) {
+      onSubmit(currentItemId, Array.from(selectedIngredients));
+    }
   };
 
   return (
