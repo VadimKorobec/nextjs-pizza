@@ -60,10 +60,9 @@ const CartDrawer = ({ children, className }: Props) => {
           </SheetTitle>
         </SheetHeader>
         <div className="flex-1 -mx-6 mt-5 overflow-auto ">
-          <div className="mb-2">
-            {items.map((item) => (
+          {items.map((item) => (
+            <div key={item.id} className="mb-2">
               <CartDrawerItem
-                key={item.id}
                 id={item.id}
                 imageUrl={item.imageUrl}
                 details={
@@ -81,10 +80,10 @@ const CartDrawer = ({ children, className }: Props) => {
                 onClickCountButton={(type) =>
                   onClickCountButton(item.id, item.quantity, type)
                 }
-                onClickRemove={()=> removeCartItem(item.id)}
+                onClickRemove={() => removeCartItem(item.id)}
               />
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
 
         <SheetFooter className="-mx-6 bg-white p-8">

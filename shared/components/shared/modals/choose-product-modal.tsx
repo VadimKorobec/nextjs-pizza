@@ -7,6 +7,7 @@ import { ProductWithRelations } from "@/@types/prisma";
 import ChoosePizzaForm from "../choose-pizza-form";
 import { Dialog, DialogContent } from "../../ui/dialog";
 import { useCartStore } from "@/shared/store/cart";
+import toast from "react-hot-toast";
 
 interface Props {
   product: ProductWithRelations;
@@ -17,7 +18,10 @@ const ChooseProductModal = ({ product, className }: Props) => {
   const router = useRouter();
   const firstItem = product.items[0];
   const isPizzaForm = Boolean(firstItem.pizzaType);
-  const addCartItem = useCartStore((state) => state.addCartItem);
+  const [addCartItem, loading] = useCartStore((state) => [
+    state.addCartItem,
+    state.loading,
+  ]);
 
   const onAddProduct = () => {
     addCartItem({
@@ -25,12 +29,27 @@ const ChooseProductModal = ({ product, className }: Props) => {
     });
   };
 
-  const onAddPizza = (productItemId: number, ingredients: number[]) => {
-    addCartItem({
-      productItemId,
-      ingredients,
-    });
+  const onAddPizza = async (productItemId: number, ingredients: number[]) => {
+    try {
+      await addCartItem({
+        productItemId,
+        ingredients,
+      });
+      toast.success("Pizza has been added to the cart");
+      router.back()
+    } catch (error) {
+      toast.error("Failed to add the pizza to the cart");
+      console.error(error);
+    }
   };
+
+  const onSubmit = (productItemId?:number,ingredients?:number[]) => {
+    if (isPizzaForm) {
+      onAddPizza(productItemId!,ingredients!)
+    } else {
+      onAddProduct()
+    }
+  }
 
   return (
     <Dialog open={Boolean(product)} onOpenChange={() => router.back()}>
@@ -47,12 +66,15 @@ const ChooseProductModal = ({ product, className }: Props) => {
             ingredients={product.ingredients}
             items={product.items}
             onSubmit={onAddPizza}
+            loading={loading}
           />
         ) : (
           <ChooseProductForm
             imageUrl={product.imageUrl}
             name={product.name}
             onSubmit={onAddProduct}
+            price={firstItem.price}
+            loading={loading}
           />
         )}
       </DialogContent>
