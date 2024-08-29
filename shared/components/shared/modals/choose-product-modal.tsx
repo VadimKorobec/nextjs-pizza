@@ -23,10 +23,18 @@ const ChooseProductModal = ({ product, className }: Props) => {
     state.loading,
   ]);
 
-  const onAddProduct = () => {
-    addCartItem({
-      productItemId: firstItem.id,
-    });
+  const onAddProduct = async() => {
+    try {
+     await addCartItem({
+        productItemId: firstItem.id,
+     });
+      toast.success(`${product.name} has been added to the cart`);
+      router.back();
+    } catch (error) {
+      toast.error(`Failed to add the ${product.name} to the cart`);
+      console.error(error);
+    }
+    
   };
 
   const onAddPizza = async (productItemId: number, ingredients: number[]) => {
@@ -35,10 +43,10 @@ const ChooseProductModal = ({ product, className }: Props) => {
         productItemId,
         ingredients,
       });
-      toast.success("Pizza has been added to the cart");
+      toast.success(`${product.name} has been added to the cart`);
       router.back()
     } catch (error) {
-      toast.error("Failed to add the pizza to the cart");
+      toast.error(`Failed to add the ${product.name} to the cart`);
       console.error(error);
     }
   };
@@ -65,14 +73,14 @@ const ChooseProductModal = ({ product, className }: Props) => {
             name={product.name}
             ingredients={product.ingredients}
             items={product.items}
-            onSubmit={onAddPizza}
+            onSubmit={onSubmit}
             loading={loading}
           />
         ) : (
           <ChooseProductForm
             imageUrl={product.imageUrl}
             name={product.name}
-            onSubmit={onAddProduct}
+            onSubmit={onSubmit}
             price={firstItem.price}
             loading={loading}
           />
