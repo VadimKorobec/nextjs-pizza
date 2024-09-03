@@ -35,7 +35,7 @@ const ProductPage = async ({ className, params: { id } }: Props) => {
             Lorem ipsum dolor sit amet consectetur adipisicing elit.
           </p>
           <GroupVariants
-            selectedValue="2"
+            value="2"
             items={[
               {
                 name: "Little",

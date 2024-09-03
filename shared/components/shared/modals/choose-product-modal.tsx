@@ -23,41 +23,23 @@ const ChooseProductModal = ({ product, className }: Props) => {
     state.loading,
   ]);
 
-  const onAddProduct = async() => {
+  
+  const onSubmit = async (productItemId?: number, ingredients?: number[]) => {
     try {
-     await addCartItem({
-        productItemId: firstItem.id,
-     });
+      const itemId = productItemId ?? firstItem.id;
+
+      await addCartItem({
+        productItemId: itemId,
+        ingredients,
+      });
+
       toast.success(`${product.name} has been added to the cart`);
       router.back();
     } catch (error) {
       toast.error(`Failed to add the ${product.name} to the cart`);
       console.error(error);
     }
-    
   };
-
-  const onAddPizza = async (productItemId: number, ingredients: number[]) => {
-    try {
-      await addCartItem({
-        productItemId,
-        ingredients,
-      });
-      toast.success(`${product.name} has been added to the cart`);
-      router.back()
-    } catch (error) {
-      toast.error(`Failed to add the ${product.name} to the cart`);
-      console.error(error);
-    }
-  };
-
-  const onSubmit = (productItemId?:number,ingredients?:number[]) => {
-    if (isPizzaForm) {
-      onAddPizza(productItemId!,ingredients!)
-    } else {
-      onAddProduct()
-    }
-  }
 
   return (
     <Dialog open={Boolean(product)} onOpenChange={() => router.back()}>
