@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 
 const useQueryFilters = (filters: Filters) => {
   const router = useRouter();
+
   useEffect(() => {
     const params = {
       ...filters.prices,
@@ -20,13 +21,7 @@ const useQueryFilters = (filters: Filters) => {
     router.push(`?${query}`, {
       scroll: false,
     });
-  }, [
-    filters.pizzaTypes,
-    filters.prices,
-    filters.selectedIngredients,
-    filters.sizes,
-    router,
-  ]);
+  }, [filters]);
 };
 
 export default useQueryFilters;
