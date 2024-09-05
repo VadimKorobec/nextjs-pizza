@@ -68,9 +68,9 @@ const CartDrawer = ({ children, className }: Props) => {
                 details={
                   item.pizzaSize && item.pizzaType
                     ? getCartItemDetails(
+                        item.ingredients,
                         item.pizzaType as PizzaType,
-                        item.pizzaSize as PizzaSize,
-                        item.ingredients
+                        item.pizzaSize as PizzaSize
                       )
                     : ""
                 }

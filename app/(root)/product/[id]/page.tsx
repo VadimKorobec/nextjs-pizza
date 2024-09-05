@@ -6,15 +6,28 @@ import Title from "@/shared/components/shared/title";
 import { notFound } from "next/navigation";
 
 interface Props {
-  className?: string;
   params: {
     id: string;
   };
+  className?: string;
 }
 
-const ProductPage = async ({ className, params: { id } }: Props) => {
+const ProductPage = async ({ params: { id } }: Props) => {
   const product = await prisma.product.findFirst({
     where: { id: Number(id) },
+    include: {
+      ingredients: true,
+      category: {
+        include: {
+          products: {
+            include: {
+              items: true,
+            },
+          },
+        },
+      },
+      items: true,
+    },
   });
 
   if (!product) {
