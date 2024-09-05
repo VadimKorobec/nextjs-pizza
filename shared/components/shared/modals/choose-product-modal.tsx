@@ -2,12 +2,12 @@
 
 import { cn } from "@/shared/lib/utils";
 import ChooseProductForm from "../choose-product-form";
-import { useRouter } from "next/navigation";
 import { ProductWithRelations } from "@/@types/prisma";
 import ChoosePizzaForm from "../choose-pizza-form";
 import { Dialog, DialogContent } from "../../ui/dialog";
 import { useCartStore } from "@/shared/store/cart";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 interface Props {
   product: ProductWithRelations;
@@ -23,7 +23,6 @@ const ChooseProductModal = ({ product, className }: Props) => {
     state.loading,
   ]);
 
-  
   const onSubmit = async (productItemId?: number, ingredients?: number[]) => {
     try {
       const itemId = productItemId ?? firstItem.id;
