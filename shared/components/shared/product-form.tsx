@@ -8,10 +8,11 @@ import ChoosePizzaForm from "./choose-pizza-form";
 
 interface Props {
   product: ProductWithRelations;
+  onSubmit?: () => void;
   className?: string;
 }
 
-const ProductForm = ({ product, className }: Props) => {
+const ProductForm = ({ product, onSubmit: _onSubit }: Props) => {
   const [addCartItem, loading] = useCartStore((state) => [
     state.addCartItem,
     state.loading,
@@ -30,6 +31,7 @@ const ProductForm = ({ product, className }: Props) => {
       });
 
       toast.success(`${product.name} has been added to the cart`);
+      _onSubit?.();
     } catch (error) {
       toast.error(`Failed to add the ${product.name} to the cart`);
       console.error(error);
