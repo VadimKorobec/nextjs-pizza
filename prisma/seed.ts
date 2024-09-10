@@ -2,7 +2,6 @@ import { Prisma } from "@prisma/client";
 import { categories, _ingredients, products } from "./constans";
 import { prisma } from "./prisma-client";
 import { hashSync } from "bcrypt";
-import { connect } from "http2";
 
 const randomNumber = (min: number, max: number) => {
   return Math.floor(Math.random() * (max - min) * 10 + min * 10) / 10;
