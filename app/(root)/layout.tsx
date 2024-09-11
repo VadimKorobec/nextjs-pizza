@@ -1,8 +1,5 @@
-
 import Header from "@/shared/components/shared/header";
 import type { Metadata } from "next";
-
-
 
 export const metadata: Metadata = {
   title: "NextJS Pizza | Main page",
@@ -18,7 +15,7 @@ export default function HomeLayout({
 }>) {
   return (
     <main className="min-h-screen">
-      <Header />
+      <Header hasSearch={true} />
       {children}
       {modal}
     </main>

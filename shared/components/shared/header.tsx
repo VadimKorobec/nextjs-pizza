@@ -9,12 +9,14 @@ import Container from "./container";
 import CartButton from "./cart-button";
 
 interface Props {
+  hasSearch?: boolean;
+  hasCart?: boolean;
   className?: string;
 }
 
-const Header = ({ className }: Props) => {
+const Header = ({ hasSearch = true, hasCart = true, className }: Props) => {
   return (
-    <header className={cn("border border-b", className)}>
+    <header className={cn("border-b", className)}>
       <Container className=" flex items-center justify-between py-8">
         <Link href="/">
           <div className="flex items-center gap-4">
@@ -27,15 +29,18 @@ const Header = ({ className }: Props) => {
             </div>
           </div>
         </Link>
-        <div className="mx-10 flex-1">
-          <SearchInput />
-        </div>
+        {hasSearch && (
+          <div className="mx-10 flex-1">
+            <SearchInput />
+          </div>
+        )}
+
         <div className="flex items-center gap-3">
           <Button variant="outline" className="flex items-center gap-1">
             <User size={16} />
             Enter
           </Button>
-          <CartButton/>
+          {hasCart && <CartButton />}
         </div>
       </Container>
     </header>
