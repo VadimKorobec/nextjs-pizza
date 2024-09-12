@@ -1,3 +1,4 @@
+import CheckoutItem from "@/shared/components/shared/checkout-item";
 import CheckoutItemDetails from "@/shared/components/shared/checkout-item-details";
 import Title from "@/shared/components/shared/title";
 import { WhiteBlock } from "@/shared/components/shared/white-block";
@@ -15,7 +16,16 @@ const CheckoutPage = ({ className }: Props) => {
       <Title text="Ordering" className="font-extrabold mb-8 text-[36px]" />
       <div className="flex gap-10">
         <div className="flex flex-col gap-10 flex-1 mb-20">
-          <WhiteBlock title="1. Cart">1234</WhiteBlock>
+          <WhiteBlock title="1. Cart">
+            <CheckoutItem
+              id={1}
+              imageUrl="../../../public/assets/images"
+              details="order"
+              name={"kyky"}
+              price={5}
+              quantity={3}
+            />
+          </WhiteBlock>
           <WhiteBlock title="2. Personal information">
             <div className="grid grid-cols-2 gap-5">
               <Input
