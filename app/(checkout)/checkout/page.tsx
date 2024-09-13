@@ -17,14 +17,24 @@ const CheckoutPage = ({ className }: Props) => {
       <div className="flex gap-10">
         <div className="flex flex-col gap-10 flex-1 mb-20">
           <WhiteBlock title="1. Cart">
-            <CheckoutItem
-              id={1}
-              imageUrl="../../../public/assets/images"
-              details="order"
-              name={"kyky"}
-              price={5}
-              quantity={3}
-            />
+            <div className="flex flex-col gap-5">
+              <CheckoutItem
+                id={1}
+                imageUrl="../../../public/assets/images"
+                details="order"
+                name={"kyky"}
+                price={5}
+                quantity={3}
+              />
+              <CheckoutItem
+                id={1}
+                imageUrl="../../../public/assets/images"
+                details="order"
+                name={"kyky"}
+                price={5}
+                quantity={3}
+              />
+            </div>
           </WhiteBlock>
           <WhiteBlock title="2. Personal information">
             <div className="grid grid-cols-2 gap-5">

@@ -29,10 +29,10 @@ interface Props {
 const CartDrawer = ({ children, className }: Props) => {
   const [
     totalAmount,
+    items,
     fetchCartItems,
     updateItemQuantity,
     removeCartItem,
-    items,
   ] = useCartStore((state) => [
     state.totalAmount,
     state.fetchCartItems,
