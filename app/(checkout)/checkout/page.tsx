@@ -1,16 +1,33 @@
+"use client";
+
 import CheckoutItem from "@/shared/components/shared/checkout-item";
-import CheckoutItemDetails from "@/shared/components/shared/checkout-item-details";
+import CheckoutSidebar from "@/shared/components/shared/checkout-sidebar";
 import Title from "@/shared/components/shared/title";
 import { WhiteBlock } from "@/shared/components/shared/white-block";
-import { Button, Input } from "@/shared/components/ui";
+import { Input } from "@/shared/components/ui";
 import { Textarea } from "@/shared/components/ui/textarea";
-import { ArrowRight, Package, Percent, Truck } from "lucide-react";
+import { PizzaSize, PizzaType } from "@/shared/constants/pizza";
+import { useCart } from "@/shared/hooks/use-cart";
+import { getCartItemDetails } from "@/shared/lib/get-cart-item-details";
 
-interface Props {
-  className: string;
-}
+const VAT = 15;
+const DELIVERY_PRICE = 250;
 
-const CheckoutPage = ({ className }: Props) => {
+const CheckoutPage = () => {
+  const { totalAmount, updateItemQuantity, items, removeCartItem } = useCart();
+
+  const onClickCountButton = (
+    id: number,
+    quantity: number,
+    type: "plus" | "minus"
+  ) => {
+    const newQuantity = type === "plus" ? quantity + 1 : quantity - 1;
+    updateItemQuantity(id, newQuantity);
+  };
+
+  const vatPrice = (totalAmount / 100) * VAT;
+  const totalPrice = totalAmount + vatPrice + DELIVERY_PRICE;
+
   return (
     <div className="mt-10">
       <Title text="Ordering" className="font-extrabold mb-8 text-[36px]" />
@@ -18,22 +35,26 @@ const CheckoutPage = ({ className }: Props) => {
         <div className="flex flex-col gap-10 flex-1 mb-20">
           <WhiteBlock title="1. Cart">
             <div className="flex flex-col gap-5">
-              <CheckoutItem
-                id={1}
-                imageUrl="../../../public/assets/images"
-                details="order"
-                name={"kyky"}
-                price={5}
-                quantity={3}
-              />
-              <CheckoutItem
-                id={1}
-                imageUrl="../../../public/assets/images"
-                details="order"
-                name={"kyky"}
-                price={5}
-                quantity={3}
-              />
+              {items.map((item) => (
+                <CheckoutItem
+                  key={item.id}
+                  id={item.id}
+                  imageUrl={item.imageUrl}
+                  details={getCartItemDetails(
+                    item.ingredients,
+                    item.pizzaType as PizzaType,
+                    item.pizzaSize as PizzaSize
+                  )}
+                  disabled={item.disabled}
+                  name={item.name}
+                  price={item.price}
+                  quantity={item.quantity}
+                  onClickCountButton={(type) =>
+                    onClickCountButton(item.id, item.quantity, type)
+                  }
+                  onClickRemove={() => removeCartItem(item.id)}
+                />
+              ))}
             </div>
           </WhiteBlock>
           <WhiteBlock title="2. Personal information">
@@ -68,46 +89,12 @@ const CheckoutPage = ({ className }: Props) => {
           </WhiteBlock>
         </div>
         <div className="w-[450px]">
-          <WhiteBlock className="p-6 sticky top-4">
-            <div className="flex flex-col gap-1">
-              <span className="text-xl">Total:</span>
-              <span className="text-[34px] font-extrabold">350 $</span>
-            </div>
-            <CheckoutItemDetails
-              title={
-                <div className="flex items-center">
-                  <Package size={18} className="mr-2 text-gray-300" />
-                  Price of items:
-                </div>
-              }
-              value="3000"
-            />
-            <CheckoutItemDetails
-              title={
-                <div className="flex items-center">
-                  <Percent size={18} className="mr-2 text-gray-300" />
-                  Taxes:
-                </div>
-              }
-              value="150"
-            />
-            <CheckoutItemDetails
-              title={
-                <div className="flex items-center">
-                  <Truck size={18} className="mr-2 text-gray-300" />
-                  Delivery:
-                </div>
-              }
-              value="50"
-            />
-            <Button
-              type="submit"
-              className="w-full h-14 rounded-2xl mt-6 text-base font-bold"
-            >
-              Move to payment
-              <ArrowRight className="w-5 ml-2" />
-            </Button>
-          </WhiteBlock>
+          <CheckoutSidebar
+            totalPrice={totalPrice}
+            totalAmount={totalAmount}
+            vatPrice={vatPrice}
+            DELIVERY_PRICE={DELIVERY_PRICE}
+          />
         </div>
       </div>
     </div>
