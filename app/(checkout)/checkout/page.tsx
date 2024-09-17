@@ -2,6 +2,7 @@
 
 import CheckoutItem from "@/shared/components/shared/checkout-item";
 import CheckoutSidebar from "@/shared/components/shared/checkout-sidebar";
+import FormInput from "@/shared/components/shared/form-components/form-input";
 import Title from "@/shared/components/shared/title";
 import { WhiteBlock } from "@/shared/components/shared/white-block";
 import { Input } from "@/shared/components/ui";
@@ -9,12 +10,15 @@ import { Textarea } from "@/shared/components/ui/textarea";
 import { PizzaSize, PizzaType } from "@/shared/constants/pizza";
 import { useCart } from "@/shared/hooks/use-cart";
 import { getCartItemDetails } from "@/shared/lib/get-cart-item-details";
+import { useForm, SubmitHandler } from "react-hook-form";
 
 const VAT = 15;
 const DELIVERY_PRICE = 250;
 
 const CheckoutPage = () => {
   const { totalAmount, updateItemQuantity, items, removeCartItem } = useCart();
+
+  const form = useForm();
 
   const onClickCountButton = (
     id: number,
@@ -70,7 +74,11 @@ const CheckoutPage = () => {
                 placeholder="Second name"
               />
               <Input name="email" className="text-base" placeholder="E-mail" />
-              <Input name="phone" className="text-base" placeholder="Phone" />
+              <FormInput
+                name="phone"
+                className="text-base"
+                placeholder="Phone"
+              />
             </div>
           </WhiteBlock>
           <WhiteBlock title="3. Delivery address">
