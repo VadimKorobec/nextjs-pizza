@@ -40,7 +40,7 @@ const CheckoutSidebar = ({
             Taxes:
           </div>
         }
-        value={`${vatPrice} $`}
+        value={`${Math.round(vatPrice)} $`}
       />
       <CheckoutItemDetails
         title={
