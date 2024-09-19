@@ -1,3 +1,4 @@
+import { useFormContext } from "react-hook-form";
 import { Input } from "../../ui";
 import ClearButton from "../clear-button";
 import ErrorText from "../error-text";
@@ -11,6 +12,20 @@ interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
 }
 
 const FormInput = ({ className, name, label, required, ...props }: Props) => {
+  const {
+    register,
+    formState: { errors },
+    watch,
+    setValue,
+  } = useFormContext();
+
+  const value = watch(name);
+  const errorText = errors[name]?.message as string;
+
+  const onClickClear = () => {
+    setValue(name, "", { shouldValidate: true });
+  };
+
   return (
     <div className={className}>
       {label && (
@@ -19,10 +34,10 @@ const FormInput = ({ className, name, label, required, ...props }: Props) => {
         </p>
       )}
       <div className="relative">
-        <Input className="h-12 text-md" {...props} />
-        <ClearButton onClick={() => console.log("click")} />
+        <Input className="h-12 text-md" {...register(name)} {...props} />
+        {value && <ClearButton onClick={onClickClear} />}
       </div>
-      <ErrorText text="The field is required" className="mt-2" />
+      {!value && <ErrorText text={errorText} className="mt-2 pl-3" />}
     </div>
   );
 };

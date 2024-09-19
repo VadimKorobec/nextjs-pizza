@@ -10,17 +10,17 @@ const CheckoutPersonalForm = ({ className }: Props) => {
   return (
     <WhiteBlock title="2. Personal information" className={className}>
       <div className="grid grid-cols-2 gap-5">
-        <Input
+        <FormInput
           name="firstName"
           className="text-base"
           placeholder="First name"
         />
-        <Input
+        <FormInput
           name="lastName"
           className="text-base"
           placeholder="Second name"
         />
-        <Input name="email" className="text-base" placeholder="E-mail" />
+        <FormInput name="email" className="text-base" placeholder="E-mail" />
         <FormInput name="phone" className="text-base" placeholder="Phone" />
       </div>
     </WhiteBlock>

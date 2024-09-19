@@ -2,7 +2,7 @@ import { cn } from "@/shared/lib/utils";
 import { X } from "lucide-react";
 
 interface Props {
-  onClick: VoidFunction;
+  onClick?: VoidFunction;
   className?: string;
 }
 

@@ -1,5 +1,5 @@
 import { Input } from "../../ui/input";
-import { Textarea } from "../../ui/textarea";
+import { FormTextarea } from "../form/form-textarea";
 import { WhiteBlock } from "../white-block";
 
 interface Props {
@@ -15,7 +15,12 @@ const CheckoutAddressForm = ({ className }: Props) => {
           className="text-base"
           placeholder="Enter your address"
         />
-        <Textarea className="text-base" placeholder="Order comment" rows={5} />
+        <FormTextarea
+          name="comment"
+          className="text-base"
+          placeholder="Order comment"
+          rows={5}
+        />
       </div>
     </WhiteBlock>
   );
